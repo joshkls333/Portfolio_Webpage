@@ -4,16 +4,12 @@ Created by: Josh Klaus
 
 
 body {
-    font-family: monaco, arial;
-    background-image: url('images/dkgrnback.jpeg') !important;
-    background-repeat: no-repeat !important;
+  font-family: monaco, arial;
+  background-image: url('images/dkgrnback.jpeg') !important;
+  background-repeat: no-repeat !important;
   background: #0F5B30 !important;
- 	/* background: -webkit-linear-gradient(orange,green);
- 	background: -o-linear-gradient(orange,green);
- 	background: -moz-linear-gradient(orange,green);
- 	background: linear-gradient(orange,green); */
 	color: #000000;
-    text-align: center;
+  text-align: center;
 }
 
 .jumbotron {
@@ -40,10 +36,10 @@ hr {
 }
 
 .container2 {
-  background-color: white;
-  margin: 3rem;
-  border: 3rem;
-  padding: 3rem;
+  background-color: white !important;
+  margin: 3rem !important;
+  border: 3rem !important;
+  padding: 3rem !important;
 }
 
 a{
