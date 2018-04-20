@@ -1,0 +1,237 @@
+<link href="../css/txtstyle.css" rel="stylesheet" type="text/css" />
+
+/* Josh Klaus */ 
+
+\W    /* enable warnings! */
+
+use a_xml;
+
+/*  TASK 00 */
+select user(), current_date(), version(), @@sql_mode\G
+
+
+/*  TASK 01 */
+
+
+use a_xml;
+
+drop table if exists a_xml.xml_animals;
+
+create table a_xml.xml_animals(
+  id    int primary key
+, datax TEXT)
+;
+truncate table a_xml.xml_animals;
+
+insert into a_xml.xml_animals values (1,
+'<client cl_id="8243"><cl_name>Johnson</cl_name><pets>
+<animal><an_id>136</an_id><an_type>bird</an_type><an_name>ShowBoat</an_name><an_price>75</an_price></animal>
+<animal><an_id>137</an_id><an_type>bird</an_type><an_name>Mr. Peanut</an_name><an_price>250</an_price></animal>
+</pets></client>');
+
+insert into a_xml.xml_animals values (2,
+'<client cl_id="3908"><cl_name>Nelson</cl_name><pets>
+<animal><an_id>1201</an_id><an_type>cat</an_type>
+<an_name>Ursula</an_name><an_name>Snookums</an_name><an_name>Mittens</an_name><an_price>500</an_price></animal>
+</pets></client>');
+
+ insert into a_xml.xml_animals values (3,
+'<client cl_id="3775"><cl_name>Miller</cl_name><pets/></client>');
+
+ insert into a_xml.xml_animals values (4,
+'<client cl_id="8467"><cl_name>Miller</cl_name><pets>
+<animal><an_id>205</an_id><an_type>bird</an_type><an_name>ShowBoat</an_name><an_price>75</an_price></animal>
+<animal><an_id>207</an_id><an_type>bird</an_type><an_name>Mr. Peanut</an_name><an_price>150</an_price></animal>
+<animal><an_id>212</an_id><an_type>bird</an_type><an_name>Tweet</an_name><an_price>275</an_price></animal>
+<animal><an_id>215</an_id><an_type>bird</an_type><an_name>Charlie</an_name><an_price>380</an_price></animal>
+</pets></client>');
+
+ insert into a_xml.xml_animals values (5,
+'<client cl_id="4578"><cl_name>Leeson</cl_name><pets>
+<animal><an_id>358</an_id><an_type>bird</an_type><an_name>Archibald</an_name><an_price>275</an_price></animal>
+<animal><an_id>369</an_id><an_type>cat</an_type><an_name>Smithers</an_name><an_name>Smuthers</an_name><an_price>250</an_price></animal>
+<animal><an_id>3478</an_id><an_type>dog</an_type><an_name>Bossun</an_name><an_price>250</an_price></animal>
+</pets></client>');
+
+  insert into a_xml.xml_animals values (6,
+'<client cl_id="9478"><cl_name>Terry</cl_name><pets>
+<animal><an_id>658</an_id><an_type>bird</an_type><an_name>Archibald</an_name><an_price>275</an_price></animal>
+<animal><an_id>669</an_id><an_type>bird</an_type><an_name>Smithers1</an_name><an_name>Smuthers2</an_name><an_price>250</an_price></animal><
+animal><an_id>2478</an_id><an_type>bird</an_type><an_name>cat </an_name><an_price>250</an_price></animal>
+</pets></client>');
+
+
+  insert into a_xml.xml_animals values (7,
+'<client cl_id="4478"><cl_name>Clyde</cl_name><pets>
+<animal><an_id>101</an_id><an_type>bird</an_type><an_name>Archibald</an_name><an_price>275</an_price></animal>
+<animal><an_id>102</an_id><an_type>cat</an_type><an_name>Smithers</an_name><an_name>Smuthers</an_name><an_price>250</an_price></animal>
+<animal><an_id>103</an_id><an_type>dog</an_type><an_name>Bossun</an_name><an_price>250</an_price></animal>
+<animal><an_id>301</an_id><an_type>bird</an_type><an_name>Archibald</an_name><an_price>275</an_price></animal>
+<animal><an_id>201</an_id><an_type>cat</an_type><an_name>Smithers</an_name><an_name>Smuthers</an_name><an_price>250</an_price></animal>
+<animal><an_id>401</an_id><an_type>dog</an_type><an_name>Bossun</an_name><an_price>250</an_price></animal>
+</pets></client>');
+
+
+
+/*  TASK 02 */
+
+/*  Additional testing for cats in task 3 and 4 */
+
+  insert into a_xml.xml_animals values (8,
+'<client cl_id="5566"><cl_name>Stanley</cl_name><pets>
+<animal><an_id>561</an_id><an_type>cat</an_type><an_name>tigger</an_name><an_price>100</an_price></animal>
+<animal><an_id>7692</an_id><an_type>cat</an_type><an_name>Lester</an_name><an_price>150</an_price></animal>
+<animal><an_id>1883</an_id><an_type>dog</an_type><an_name>Buster</an_name><an_price>175</an_price></animal>
+</pets></client>');
+
+/*  Additional testing for NO cats in task 3 and 4 */
+
+  insert into a_xml.xml_animals values (9,
+'<client cl_id="3158"><cl_name>Wolverine</cl_name><pets>
+<animal><an_id>125</an_id><an_type>fish</an_type><an_name>lucy</an_name><an_price>100</an_price></animal>
+<animal><an_id>489</an_id><an_type>bird</an_type><an_name>Jimmy</an_name><an_price>150</an_price></animal>
+<animal><an_id>927</an_id><an_type>dog</an_type><an_name>Dave</an_name><an_price>175</an_price></animal>
+</pets></client>');
+
+/*  Additional testing for NO animals in task 8 and 9 */
+
+  insert into a_xml.xml_animals values (10,
+'<client cl_id="8881"><cl_name>Frodo</cl_name><pets/>
+</client>');
+
+/*  Additional testing for birds at diff prices in task 5 */
+
+  insert into a_xml.xml_animals values (11,
+'<client cl_id="7613"><cl_name>Marvin</cl_name><pets>
+<animal><an_id>681</an_id><an_type>bird</an_type><an_name>robin</an_name><an_price>275</an_price></animal>
+<animal><an_id>781</an_id><an_type>bird</an_type><an_name>Jester</an_name><an_name>dusty</an_name><an_price>250</an_price></animal><
+animal><an_id>981</an_id><an_type>bird</an_type><an_name>billy </an_name><an_price>250</an_price></animal>
+</pets></client>');
+
+/*  Additional testing for multiple names in task 6 */
+
+
+  insert into a_xml.xml_animals values (12,
+'<client cl_id="9933"><cl_name>Yeshuan</cl_name><pets>
+<animal><an_id>5487</an_id><an_type>dog</an_type><an_name>Snoopy</an_name><an_name>Brown</an_name><an_price>75</an_price></animal>
+</pets></client>');
+
+
+select extractvalue(datax,'/client/cl_name') as Client
+     , extractvalue(datax,'/client/pets/animal/an_type') as TypeOfAnimal
+     , extractvalue(datax,'/client/pets/animal/an_name') as AnimalName
+     , extractvalue(datax,'/client/pets/animal/an_price') as AnimalPrice
+from xml_animals;
+
+
+/*  TASK 03 */
+
+
+select extractvalue(datax,'client/cl_name') as Client
+     , extractvalue(datax,'client/@cl_id') as ClientID
+from xml_animals
+where extractvalue(datax,'client/pets/animal/an_type') like '%cat%';
+
+
+
+/*  TASK 04 */
+
+select extractvalue(datax,'client/cl_name') as Client
+     , extractvalue(datax,'client/@cl_id') as ClientID
+from xml_animals
+where extractvalue(datax,'count(//animal[an_type="cat"])')>0;
+
+
+/*  TASK 05 */
+
+
+select extractvalue(datax,'client/cl_name') as Client
+     , extractvalue(datax,'client/@cl_id') as ClientID
+from xml_animals
+where extractvalue(datax,'count(client/pets/animal/an_type[self:text()="bird"]/../an_price[self:text()=250])')>0;
+
+
+/*  TASK 06 */
+
+select extractvalue(datax,'client/cl_name') as Client
+     , extractvalue(datax,'client/@cl_id') as ClientID
+     , concat( extractvalue(datax,'/client/pets/animal[1]/an_type'), " named ",
+       extractvalue(datax,'/client/pets/animal[1]/an_name')
+       )as Animal_First
+from xml_animals;
+
+
+
+/*  TASK 07 */
+
+select extractvalue(datax,'client/cl_name') as Client
+     , extractvalue(datax,'client/@cl_id') as ClientID
+     , case
+       when extractvalue(datax,'count(/client/pets/animal[1]/an_name)')=0
+       then concat( extractvalue(datax,'/client/pets/animal[1]/an_type'), " with no name")
+       when extractvalue(datax,'count(/client/pets/animal[1]/an_name)')>1
+       then concat( extractvalue(datax,'/client/pets/animal[1]/an_type'), " named ",
+       extractvalue(datax,'/client/pets/animal/an_name[last()]'))
+       else concat( extractvalue(datax,'/client/pets/animal[1]/an_type'), " named ",
+       extractvalue(datax,'/client/pets/animal[1]/an_name'))
+       end as Animal_First
+from xml_animals;
+
+
+/*  TASK 08 */
+
+
+select extractvalue(datax,'client/cl_name') as Client
+     , extractvalue(datax,'client/@cl_id') as ClientID
+from xml_animals
+where length(extractvalue(datax,'/client/pets/animal[2]/an_type'))>0 and length(extractvalue(datax,'/client/pets/animal[4]/an_type'))=0;
+
+
+/*  TASK 09 */
+
+select extractvalue(datax,'client/cl_name') as Client
+     , extractvalue(datax,'client/@cl_id') as ClientID
+     , extractvalue(datax,'count(/client/pets/animal)') as NumberOfAnimals
+from xml_animals
+order by NumberOfAnimals desc;
+
+
+/*  TASK 10 */
+
+select extractvalue(datax,'client/@cl_id') as ClientID
+     , extractvalue(datax,'/client/descendant::*') as clientdata
+from xml_animals\G
+
+
+/*  TASK 11 */
+
+select extractvalue(datax,'client/cl_name') as Client
+     , extractvalue(datax,'client/@cl_id') as ClientID
+     , case
+       when extractvalue(datax,'count(//animal[an_type="bird"])')>0
+       then extractvalue(datax,'client/pets/animal/an_type[self:text()="bird"]/../an_name[1]')
+       else ' '
+       end as AnimalName
+     , case
+       when extractvalue(datax,'count(//animal[an_type="bird"])')>0
+       then extractvalue(datax,'client/pets/animal/an_type[self:text()="bird"]/../child::*')
+       else ' '
+       end as AnimalData
+from xml_animals\G
+
+/*  TASK 12 */
+
+
+select extractvalue(datax,'client/cl_name') as Client
+     , extractvalue(datax,'client/@cl_id') as ClientID
+     , case
+       when extractvalue(datax,'count(//animal[an_type="bird"])')>0
+       then extractvalue(datax,'client/pets/animal/an_type[self:text()="bird"]/../an_name[1]')
+       else null
+       end as AnimalName
+     , case
+       when extractvalue(datax,'count(//animal[an_type="bird"])')>0
+       then extractvalue(datax,'client/pets/animal/an_type[self:text()="bird"]/../child::*')
+       else null
+       end as AnimalData
+from xml_animals\G

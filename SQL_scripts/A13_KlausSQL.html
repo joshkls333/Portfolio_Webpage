@@ -1,0 +1,127 @@
+<link href="../css/txtstyle.css" rel="stylesheet" type="text/css" />
+
+/* Josh Klaus */ 
+
+\W    /* enable warnings! */
+
+use a_testbed;
+
+/*  TASK 00 */
+select user(), current_date(), version(), @@sql_mode\G
+
+
+/*  TASK 01 */
+
+select lastname, firstname,
+       a_testbed.NameFormat('F',lastname,firstname) as Fname,
+       a_testbed.NameFormat('L',lastname,firstname) as Lname
+from(
+select 'klaus' as lastname, 'josh' as firstname
+union all
+select 'smith','john'
+union all
+select 'doe','jane'
+union all
+select 'kraft','jim'
+union all
+select 'mitz','carrie'
+union all
+select 'hazel',null
+union all
+select 'fazeb',null
+)as testdata;
+
+/*  TASK 02 */
+
+select cust_id,
+       a_testbed.nameformat('L',cust_name_last, cust_name_first)
+       as 'Name Format'
+from a_bkorders.customers limit 10;
+
+/*  TASK 03 */
+
+select a_testbed.nameformat('B', book_id,left(title,25)) as Book
+from a_bkinfo.books limit 10;
+
+/*  TASK 04 */
+
+select teststring, a_testbed.internalblankcount(teststring) as SpaceNumber
+from(
+select '   I wish I was a  ' as teststring
+union all
+select '   a    well paid programmer'
+union all
+select '  for a decent company'
+union all
+select 'where I could e x p an d on my skills   '
+union all
+select 'andbecome anasset   '
+)as testdata;
+
+/*  TASK 05 */
+
+select page, a_testbed.BookSize(page)
+from(
+select 25 as page
+union all
+select 250
+union all
+select 25
+union all
+select 1250
+union all
+select 725
+union all
+select 450
+union all
+select 325
+union all
+select 50
+union all
+select 725
+union all
+select 230
+union all
+select 255
+union all
+select 1350
+union all
+select 1125
+union all
+select 2500
+union all
+select null
+)as testdata;
+
+/*  TASK 06 */
+
+select a_testbed.booksize(page_count) as 'BookSize',
+  count(a_testbed.booksize(page_count)) as 'NumBooks'
+from a_bkinfo.books
+group by booksize
+order by page_count;
+
+/*  TASK 07 */
+
+select c_id, c_name
+from a_bkorders.bkv_Custorders
+where date_format(order_date,'%Y-%m')=
+      a_testbed.prevmonth(curdate(),6)
+and c_id in
+   (select c_id
+    from a_bkorders.bkv_Custorders
+    where date_format(order_date,'%Y-%m')=
+    a_testbed.prevmonth(curdate(),5)
+    and c_id in
+        (select c_id
+         from a_bkorders.bkv_Custorders
+         where date_format(order_date,'%Y-%m')=                                                                   a_testbed.prevmonth(curdate(),4)))
+order by order_date;
+
+/*  TASK 08 */
+
+select count(order_id) as 'Number of Orders',
+       count(distinct c_id) as 'Number of Customers'
+from a_bkorders.bkv_Custorders
+where date_format(order_date,'%Y-%m')>a_testbed.prevmonth(curdate(),3)
+and date_format(order_date,'%Y-%m')<date_format(curdate(),'%Y-%m');

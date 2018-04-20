@@ -1,0 +1,263 @@
+<link href="../css/txtstyle.css" rel="stylesheet" type="text/css" />
+
+/* Josh Klaus */ 
+
+\W    /* enable warnings! */
+
+use a_bkorders;
+
+/*  TASK 00 */
+select user(), current_date(), version(), @@sql_mode\G
+
+
+/*  TASK 01 */
+
+select order_date as OrderDate
+      ,count(distinct order_id) as NumberOrders
+      ,sum(quantity * order_price) as AmntDue
+      ,sum(quantity) as NumbBooksPurch
+from a_bkorders.order_headers
+left join a_bkorders.order_details using(order_id)
+group by order_date with rollup;
+
+
+/*  TASK 02 */
+
+
+select Year(order_date) as Year
+      ,month(order_date) as Month
+      ,order_id as OrderID
+      ,sum(quantity * order_price) as AmntDue
+      ,sum(quantity) as NumbBooksPurch
+from a_bkorders.order_headers
+left join a_bkorders.order_details using(order_id)
+group by Year, Month,OrderID with rollup;
+
+
+/*  TASK 03 */
+
+
+select coalesce(Year,'Grand Total') as Year
+      ,coalesce(Month,'Yearly Total') as Month
+      ,OrderID
+      ,AmntDue
+      ,NumbBooksPurch
+from(
+     select Year(order_date) as Year
+           ,month(order_date) as Month
+           ,order_id as OrderID
+           ,sum(quantity * order_price) as AmntDue
+           ,sum(quantity) as NumbBooksPurch
+     from a_bkorders.order_headers
+     left join a_bkorders.order_details using(order_id)
+     group by Year, Month,OrderID with rollup
+) tbl;
+
+/*  TASK 03 format 2*/
+
+select coalesce(Year,'Grand Total') as Year
+      ,case when Year is null then '............' else
+       coalesce(Month,'Year Total') end as Month
+      ,case when Month is null then '............' else
+       coalesce(OrderID,'Month Total')end as OrderID
+      ,AmntDue
+      ,NumbBooksPurch
+from(
+     select Year(order_date) as Year
+           ,month(order_date) as Month
+           ,order_id as OrderID
+           ,sum(quantity * order_price) as AmntDue
+           ,sum(quantity) as NumbBooksPurch
+     from a_bkorders.order_headers
+     left join a_bkorders.order_details using(order_id)
+     group by Year, Month,OrderID with rollup
+) tbl;
+
+
+/*  TASK 04 */
+
+
+select coalesce(Year,'Grand Total') as ""
+      ,'Yearly Total' as ""
+      ,NumberOrders
+      ,AmntDue
+      ,NumbBooksPurch
+from(
+     select Year(order_date) as Year
+           ,count(distinct order_id) as NumberOrders
+           ,sum(quantity * order_price) as AmntDue
+           ,sum(quantity) as NumbBooksPurch
+     from a_bkorders.order_headers
+     left join a_bkorders.order_details using(order_id)
+     group by Year with rollup
+) tbl;
+
+
+/*  TASK 05 */
+
+select coalesce(author_id,'All Authors') as AuthorID
+      ,coalesce(book_id,'All Books') as BookID
+      ,coalesce(TotalQuantity,0) as TotalQuantity
+      ,coalesce(TotalSales,'No sales') as TotalSales
+from(
+     select author_id
+          , book_id
+          , sum(quantity) as TotalQuantity
+          , sum(quantity * order_price) as TotalSales
+     from a_bkinfo.book_authors
+     left join a_bkorders.order_details using(book_id)
+     where author_sequence =1
+     group by author_id, book_id with rollup
+)tbl ;
+
+
+
+/*  TASK 06 */
+
+
+select coalesce(author_id,'All Authors') as AuthorID
+      ,coalesce(book_id,'All Books') as BookID
+      ,coalesce(TotalQuantity,0) as TotalQuantity
+      ,coalesce(TotalSales,'No sales') as TotalSales
+from(
+     select author_id
+          , book_id
+          , sum(quantity) as TotalQuantity
+          , sum(quantity * order_price) as TotalSales
+     from a_bkinfo.book_authors
+     left join a_bkorders.order_details using(book_id)
+     where author_sequence =1
+     group by author_id, book_id with rollup
+     union all
+     select author_id as AuthorID
+          , ' no books' as Bookid
+          , 0 as   TotalQuantity
+          , 'No sales' as TotalSales
+     from a_bkinfo.authors
+     where author_id not in
+             (select author_id
+              from a_bkinfo.book_authors)
+     group by authorid, bookid with rollup
+     union all
+     select '_anon' as AuthorID
+          , book_id
+          , sum(quantity) as TotalQuantity
+          , sum(quantity * order_price) as TotalSales
+     from a_bkinfo.books
+     left join a_bkorders.order_details using(book_id)
+     where book_id not in
+             (select book_id
+              from a_bkinfo.book_authors)
+     group by Authorid, book_id with rollup
+
+)tbl ;
+
+/*  TASK 07 */
+
+select book_id, page_count,(
+	select count(distinct page)
+      from(
+            select case
+               when (round(page_count,-2)-page_count)<=0
+               then round(page_count,-2) + 49
+               else round(page_count,-2)
+               end as page
+               from a_bkinfo.books
+               order by page_count desc
+       	  )tbl
+      where tbl.page >= page_count
+      ) as rank
+from a_bkinfo.books
+order by page_count desc;
+
+
+
+/*  TASK 08 */
+
+set @publ := 0;
+set @rank := 0;
+
+select publ_id, left(title,25), page_count, rank
+from( select publ_id, title, page_count
+      , case when @publ = publ_id then @rank := @rank +1
+        else @rank :=1
+        end as rank
+      , case when @publ <> publ_id then @publ:= publ_id
+        end as brk
+from a_bkinfo.books
+order by publ_id, page_count) tbl
+where rank<4;
+
+
+
+/*  TASK 09 */
+
+select a1.order_date as OrderDate
+     , sum(a2.ords) as '3 Day Order Count'
+     , sum(a2.bks) as '3 Day Total Quantity'
+from(
+	select order_date
+          , count(distinct order_id) as ords
+          , sum(quantity) as bks
+	from a_bkorders.order_headers
+	join a_bkorders.order_details using(order_id)
+	where month(order_date)=9
+       and year(order_date)=2012
+	group by order_date
+	)a1
+join(
+	select order_date
+          , count(distinct order_id) as ords
+          , sum(quantity) as bks
+	from a_bkorders.order_headers
+	join a_bkorders.order_details using(order_id)
+	where month(order_date)=9
+       and year(order_date)=2012
+	group by order_date
+	)a2
+   on a2.order_date between
+      date_sub(a1.order_date,interval 1 day)
+  and date_add(a1.order_date,interval 1 day)
+group by a1.order_date;
+
+
+
+
+
+/*  TASK 10 */
+
+
+set @startdtm  := '2012-09-01';
+set @stopdtm   := '2012-09-30';
+
+
+select OrderDate
+      ,coalesce(QuantityOrdered,0) as 'QuantityOrdered'
+      ,coalesce(TotalSales,0) as 'TotalSales'
+from(
+     select OrderDate
+          ,(select sum(quantity)
+            from a_bkorders.order_headers bkor1
+            left join a_bkorders.order_details using(order_id)
+            where bkor1.order_date=cal.Orderdate)
+            as 'QuantityOrdered'
+          ,(select sum(quantity *order_price)
+            from a_bkorders.order_headers bkor2
+            left join a_bkorders.order_details using(order_id)
+            where bkor2.order_date=cal.OrderDate)
+            as 'TotalSales'
+     from(
+          select adddate(@startdtm, numvalue)  as OrderDate
+          from(
+           select b1.val + b2.val + b4.val + b8.val + b16.val + b32.val as numvalue
+        from
+             (select 0 val union  all  select 1) b1 cross join
+             (select 0 val union  all  select 2) b2 cross join
+             (select 0 val union  all  select 4) b4 cross join
+             (select 0 val union  all  select 8) b8 cross join
+             (select 0 val union  all  select 16) b16 cross join
+             (select 0 val union  all  select 32) b32
+        ) as gennum
+      ) cal
+where OrderDate between @startdtm  and @stopdtm
+)tbl;
