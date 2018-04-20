@@ -1,0 +1,210 @@
+<link href="../css/txtstyle.css" rel="stylesheet" type="text/css" />
+
+/* Josh Klaus */
+
+\W    /* enable warnings! */
+
+use a_bkinfo;
+use a_bkorders;
+
+/*  TASK 00 */
+select user(), current_date(), version(), @@sql_mode\G
+
+/*  TASK 01 */
+
+set @rundate = curdate();
+
+
+set @6mthago = cast(concat(
+                    cast(date_sub(@rundate, interval 6 month)
+                    as char(8)), '01')
+                    as date);
+
+
+set @5mthago = Cast(concat(
+                    cast(date_sub(@rundate, interval 5 month)
+                    as char(8)), '01')
+                    as date);
+
+set @4mthago = cast(concat(
+                    cast(date_sub(@rundate, interval 4 month)
+                    as char(8)), '01')
+                    as date);
+
+set @3mthago = cast(concat(
+                    cast(date_sub(@rundate, interval 3 month)
+                    as char(8)), '01')
+                    as date);
+
+select @rundate, @6mthago, @5mthago, @4mthago, @3mthago\G;
+
+/*  TASK 02 */
+
+select *
+from a_bkorders.bkv_Custorders
+where order_date >=@6mthago
+      and order_date<@5mthago
+order by order_date;
+
+
+select *
+from a_bkorders.bkv_Custorders
+where order_date >=@5mthago
+      and order_date<@4mthago
+order by order_date;
+
+select *
+from a_bkorders.bkv_Custorders
+where order_date >=@4mthago
+      and order_date<@3mthago
+order by order_date;
+
+
+/*  TASK 03 */
+
+select c_id, c_name
+from a_bkorders.bkv_Custorders
+where order_date >=@6mthago
+      and order_date<@5mthago
+union
+select c_id, c_name
+from a_bkorders.bkv_Custorders
+where order_date >=@5mthago
+      and order_date<@4mthago
+union
+select c_id, c_name
+from a_bkorders.bkv_Custorders
+where order_date >=@4mthago
+      and order_date<@3mthago
+;
+
+/*  TASK 04 */
+
+select distinct c_id, c_name
+from a_bkorders.bkv_Custorders
+where c_id not in(
+         select c_id
+         from a_bkorders.bkv_Custorders
+         where order_date >=@6mthago
+           and order_date<@3mthago)
+;
+
+
+
+/*  TASK 05 */
+
+select distinct c_id, c_name
+from a_bkorders.bkv_Custorders
+where c_id in(
+         select c_id
+         from a_bkorders.bkv_Custorders
+         where order_date >=@6mthago
+         and order_date<@5mthago and c_id in(
+              select c_id
+              from a_bkorders.bkv_Custorders
+              where order_date >=@5mthago
+              and order_date<@4mthago and c_id in(
+                  select c_id
+                  from a_bkorders.bkv_Custorders
+                  where order_date >=@4mthago
+                  and order_date<@3mthago)));
+
+
+/*  TASK 06 */
+
+select distinct c_id, c_name
+from a_bkorders.bkv_Custorders
+where order_date >=@6mthago
+  and order_date<@5mthago
+  and c_id not in(
+              select c_id
+              from a_bkorders.bkv_Custorders
+              where order_date >=@5mthago
+              and order_date<@3mthago);
+
+
+/*  TASK 07 */
+
+select distinct c_id, c_name
+from a_bkorders.bkv_Custorders
+where order_date >=@6mthago
+  and order_date<@5mthago
+  and c_id in(
+              select c_id
+              from a_bkorders.bkv_Custorders
+              where order_date >=@5mthago
+              and order_date<@3mthago);
+
+/*  TASK 08 */
+
+select distinct c_id, c_name
+from a_bkorders.bkv_Custorders
+where order_date >=@6mthago
+  and order_date<@5mthago
+  and c_id in(
+              select c_id
+              from a_bkorders.bkv_Custorders
+              where order_date >=@5mthago
+              and order_date<@3mthago
+              and c_id not in(
+                   select c_id
+                   from a_bkorders.bkv_Custorders
+                   where order_date >=@5mthago
+                   and order_date<@4mthago
+                   and c_id in(
+                         select c_id
+                         from a_bkorders.bkv_Custorders
+                         where order_date >=@4mthago
+                         and order_date<@3mthago)));
+
+
+
+
+/*  TASK 09 */
+
+select distinct c_id, c_name
+from a_bkorders.bkv_Custorders
+where order_date >=@6mthago
+  and order_date<@4mthago
+  and c_id not in(
+              select c_id
+              from a_bkorders.bkv_Custorders
+              where order_date >=@4mthago
+              and order_date<@3mthago);
+
+/*  TASK 10 */
+
+select distinct c_id, c_name
+from a_bkorders.bkv_Custorders
+where order_date >=@6mthago
+   and order_date<@3mthago
+   and c_id not in(
+       select c_id
+       from a_bkorders.bkv_Custorders
+       where order_date >=@4mthago
+          and order_date<@3mthago
+          and c_id in(
+              select c_id
+              from a_bkorders.bkv_Custorders
+              where order_date >=@5mthago
+              and order_date<@4mthago)
+       union
+       select c_id
+       from a_bkorders.bkv_Custorders
+       where order_date >=@6mthago
+         and order_date<@5mthago
+         and c_id in(
+              select c_id
+              from a_bkorders.bkv_Custorders
+              where order_date >=@5mthago
+              and order_date<@4mthago)
+       union
+       select c_id
+       from a_bkorders.bkv_Custorders
+       where order_date >=@6mthago
+         and order_date<@5mthago
+         and c_id in(
+              select c_id
+              from a_bkorders.bkv_Custorders
+              where order_date >=@4mthago
+              and order_date<@3mthago));

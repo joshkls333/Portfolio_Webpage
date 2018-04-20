@@ -1,0 +1,165 @@
+<link href="../css/txtstyle.css" rel="stylesheet" type="text/css" />
+
+/* Josh Klaus */
+
+\W    /* enable warnings! */
+
+use a_bkinfo;
+use a_bkorders;
+
+/*  TASK 00 */
+select user(), current_date(), version(), @@sql_mode\G
+
+/*  TASK 01 */
+
+select cust_id, cust_name_last,
+      (select count(order_id)
+       from a_bkorders.order_headers oh
+       where oh.cust_id = cu.cust_id) as "number of orders"
+from a_bkorders.customers cu
+where cust_id<250000
+order by cust_id;
+
+/*  TASK 02 */
+
+select cust_id, cust_name_last
+from a_bkorders.customers
+where exists
+    (select *
+     from a_bkorders.order_headers
+     where customers.cust_id = order_headers.cust_id
+     and extract( month from order_date) =10
+     and extract( year from order_date)= year(curdate())-1
+     and order_headers.cust_id in
+        (select cust_id
+         from a_bkorders.order_headers
+         where extract(month from order_date) =11
+         and extract( year from order_date)- year(curdate())-1
+         and order_headers.cust_id in
+            (select cust_id
+             from a_bkorders.order_headers
+             where extract(month from order_date) =12
+             and extract( year from order_date)- year(curdate())-1)))
+order by cust_id;
+
+
+/*  TASK 03 */
+
+select author_name_first, author_name_last, author_id
+from a_bkinfo.authors au
+where exists
+    (select count(author_id)
+     from a_bkinfo.book_authors bkau
+     where bkau.author_id=au.author_id
+     and not exists
+         (select *
+          from a_bkorders.order_details od
+          where bkau.book_id = od.book_id)
+     group by author_id
+     having count(author_id)>1)
+order by author_id;
+
+/*  TASK 04 */
+
+select book_id, title
+from a_bkinfo.books
+where book_id in
+    (select book_id
+     from a_bkinfo.book_topics
+     where topic_id ="ORA"
+     and book_id in
+         (select book_id
+          from a_bkinfo.book_topics
+          where topic_id ="SSRV"
+          and book_id not in
+              (select book_id
+               from a_bkinfo.book_topics
+               where topic_id ="MySQL")))
+or book_id in
+    (select book_id
+     from a_bkinfo.book_topics
+     where topic_id ="SSRV"
+     and book_id in
+         (select book_id
+          from a_bkinfo.book_topics
+          where topic_id ="MySQL"
+          and book_id not in
+              (select book_id
+               from a_bkinfo.book_topics
+               where topic_id ="ORA")))
+or book_id in
+    (select book_id
+     from a_bkinfo.book_topics
+     where topic_id ="ORA"
+     and book_id in
+         (select book_id
+          from a_bkinfo.book_topics
+          where topic_id ="MySQL"
+          and book_id not in
+              (select book_id
+               from a_bkinfo.book_topics
+               where topic_id ="SSRV")))
+;
+
+
+/*  TASK 05 */
+
+select (select
+        concat(author_name_last,", ",author_name_first)
+        from a_bkinfo.authors au
+        where au.author_id = bkau.author_id) as "Author",
+       (select title
+        from a_bkinfo.books bk
+        where bk.book_id = bkau.book_id) as "Title",
+        author_sequence
+from a_bkinfo.book_authors bkau
+where author_id in
+    (select author_id
+     from a_bkinfo.book_authors
+     where author_sequence =1
+     and author_id in
+        (select author_id
+         from a_bkinfo.book_authors
+         where author_sequence >=2))
+order by author, author_sequence;
+
+
+/*  TASK 06 */
+
+select order_date, order_id, cust_id,
+    (select cust_name_last
+     from a_bkorders.customers cu
+     where cu.cust_id = oh.cust_id)
+     as "customer",
+    (select sum(quantity)
+     from a_bkorders.order_details od
+     where od.order_id = oh.order_id)
+     as "NumberBooks",
+    (select sum(quantity*order_price)
+     from a_bkorders.order_details od
+     where od.order_id = oh.order_id)
+     as "OrderCost"
+from a_bkorders.order_headers oh
+where quarter(order_date)=2
+and extract( year from order_date)= year(curdate());
+
+/*  TASK 07 */
+
+select distinct(select cust_id
+        from a_bkorders.customers cu
+        where cu.cust_id=oh.cust_id)
+        as "cust_id",
+       (select cust_name_last
+        from a_bkorders.customers cu
+        where cu.cust_id=oh.cust_id)
+        as "cust_name_last"
+from a_bkorders.order_headers oh
+where order_id in
+    (select order_id
+     from a_bkorders.order_details od
+     where oh.order_id=od.order_id
+     and book_id in
+              (select book_id
+               from a_bkorders.order_details de
+               where od.order_id=de.order_id
+               and de.order_line!=od.order_line));

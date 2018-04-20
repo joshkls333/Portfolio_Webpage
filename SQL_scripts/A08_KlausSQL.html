@@ -1,0 +1,200 @@
+<link href="../css/txtstyle.css" rel="stylesheet" type="text/css" />
+
+/* Josh Klaus */
+
+\W    /* enable warnings! */
+
+use a_bkinfo;
+use a_bkorders;
+
+/*  TASK 00 */
+select user(), current_date(), version(), @@sql_mode\G
+
+/*  TASK 01 */
+
+select book_id as "Book_id",
+ round(AVG( order_price),0) as "AvgPrice",
+ COUNT(quantity) as "CopiesOrdered"
+from a_bkorders.order_details
+group by book_id;
+
+
+
+select book_id as "Book_id",
+ round(AVG( order_price),0) as "AvgPrice",
+ sum(quantity) as "CopiesOrdered"
+from a_bkorders.order_details
+group by book_id;
+
+
+/*  TASK 02 */
+
+select topic_id as "ID", topic_descr
+, count(title) as "NumberOfBooks"
+, coalesce(round(avg( list_price),2),'n/a') as "AvgListPrice"
+from a_bkinfo.topics
+left join a_bkinfo.book_topics using (topic_id)
+left join a_bkinfo.books using (book_id)
+group by topic_id
+order by topic_id;
+
+
+select topic_id as "ID", topic_descr
+, count(book_id) as "NumberOfBooks"
+, coalesce(round(avg( list_price),2),'n/a') as "AvgListPrice"
+from a_bkinfo.topics
+left join a_bkinfo.book_topics using (topic_id)
+left join a_bkinfo.books using (book_id)
+group by topic_id
+order by topic_id;
+
+
+/*  TASK 03 */
+
+set @mnthbeg = cast(concat(
+                    cast(curdate()as char(8)), '01')
+                    as date);
+
+set @prevyear = date_sub(@mnthbeg, interval 12 month);
+
+select count(order_id) as "NumberOrders",
+count(distinct cust_id) as "NumberCustWithOrders"
+from a_bkorders.order_headers
+where order_date >=@prevyear
+  and order_date <@mnthbeg;
+
+
+/*  TASK 04 */
+
+set @mnthbeg = cast(concat(
+                    cast(curdate()as char(8)), '01')
+                    as date);
+
+set @2mthago = date_sub(@mnthbeg, interval 2 month);
+
+select count(order_id) as "NumberOrders",
+count(distinct cust_id) as "NumberCustWithOrders"
+from a_bkorders.order_headers
+where order_date>=@2mthago
+  and order_date<@mnthbeg;
+
+/*  TASK 05 */
+
+set @bktopic = 'XML';
+
+select count(order_id) as "NumOrders Indicated Topic"
+from a_bkorders.order_details
+join a_bkinfo.books using (book_id)
+join a_bkinfo.book_topics using (book_id)
+where book_topics.topic_id= @bktopic;
+
+
+set @bktopic = 'XML';
+
+select count(distinct order_id) as "NumOrders Indicated Topic"
+from a_bkorders.order_details
+join a_bkinfo.book_topics using (book_id)
+where book_topics.topic_id= @bktopic;
+
+
+/*  TASK 06 */
+
+select concat(publ_id," ",publ_name) as "Publisher"
+,coalesce(date_format(max(order_date), '%Y-%m-%d'),'no orders')
+ as "MostRecentOrder"
+,coalesce(date_format(min(order_date), '%Y-%m-%d'),'no orders')
+ as "OldestOrder"
+from a_bkinfo.publishers
+left join a_bkinfo.books using (publ_id)
+left join a_bkorders.order_details using (book_id)
+left join a_bkorders.order_headers using (order_id)
+group by publ_id;
+
+
+/*  TASK 07 */
+
+select cust_id, cust_name_last,
+sum(quantity * order_price) as "TotalCost"
+from a_bkorders.customers
+join a_bkorders.order_headers using (cust_id)
+join a_bkorders.order_details using (order_id)
+group by cust_id;
+
+/*  TASK 08 */
+
+set @prog= 'PGM,VB,NET,ADO';
+
+select publ_id, publ_name
+from a_bkinfo.publishers
+join a_bkinfo.books using (publ_id)
+join a_bkinfo.book_topics using (book_id)
+where find_in_set(topic_id,@prog)>0
+group by publ_id
+having count(*)>3 and count(*)<10;
+
+select publ_id, publ_name
+from a_bkinfo.publishers
+join a_bkinfo.books using (publ_id)
+join a_bkinfo.book_topics using (book_id)
+where find_in_set(topic_id,@prog)>0
+group by publ_id
+having count(distinct book_id)>3 and count(distinct book_id)<11;
+
+
+/*  TASK 09 */
+
+
+set @prog= 'PGM,VB,NET,ADO';
+set @dbase= 'DB,SQL,SSRV,MySQL,ORA,ADO';
+set @lit= 'FCT,POE';
+set @dstore= 'NOSQL,XML,DB';
+
+select
+ count(distinct
+       case when topic_id='SCI'
+       then book_topics.book_id
+       else null end) as "Science"
+,count(distinct
+       case when find_in_set(book_topics.topic_id,@prog)>0
+       then book_topics.book_id
+       else null end) as "Pgm"
+,count(distinct
+       case when find_in_set(topic_id,@dbase)>0
+       then book_topics.book_id
+       else null end) as "DB/SQL"
+,count(distinct
+       case when find_in_set(topic_id,@dstore)>0
+       then book_topics.book_id
+       else null end) as "Data Storage"
+,count(distinct
+       case when find_in_set(topic_id,@lit)>0
+       then book_topics.book_id
+       else null end) as "Fict/Poe"
+,count(distinct books.book_id) as "all Books"
+from a_bkinfo.books
+join a_bkinfo.book_topics;
+
+
+/*  TASK 10 */
+
+select date_format(order_date,'%Y-%b') as "Year-month"
+, count(distinct order_id) as "NumberOrders"
+, sum(quantity * order_price) as "TotalSales"
+from a_bkorders.order_headers
+join a_bkorders.order_details using (order_id)
+group by date_format(order_date,'%Y-%b')
+order by order_date;
+
+/*  TASK 11 */
+
+select case
+  when quarter(order_date)=1 then 'First Quarter'
+  when quarter(order_date)=2 then 'Second Quarter'
+  when quarter(order_date)=3 then 'Third Quarter'
+  when quarter(order_date)=4 then 'Fourth Quarter'
+  else 0
+  end as "SalesQuarter"
+, count(order_id) as "NumberOfOrders"
+from a_bkorders.order_headers
+group by SalesQuarter
+order by quarter(order_date) desc;
