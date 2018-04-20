@@ -29,10 +29,11 @@ hr {
   border-top: 3px solid rgba(0, 0, 0, 0.5);
 }
 
-.container{
-	width: 900px;
-	margin: 0px auto;
-	text-align: left; /* IE hack */
+.container1{
+  background-color: #B3BEBE !important;
+  margin: 3rem !important;
+  border: 3rem !important;
+  padding: 3rem !important;
 }
 
 .container2 {
@@ -42,17 +43,24 @@ hr {
   padding: 3rem !important;
 }
 
-a{
+.container3 {
+  background-color: #B3BEBE !important;
+  margin: 3rem !important;
+  border: 3rem !important;
+  padding: 3rem !important;
+}
+
+/* a{
  text-decoration: none;
  color: #006600;
 /* color: #703b00; */
 }
 
-a:hover, #nav a:active{
+/* a:hover, #nav a:active{
 	color: #FFFFFF;
 	background-color: #006600;
 	padding: 2px;
-}
+} */
 
 #nav{
 	margin: 0px auto;
@@ -120,7 +128,7 @@ td {
 	padding: 10px;
 }
 
-.footer{
+/* .footer{
 	font-family: arial;
 	font-size: 18px;
     float: left;
@@ -130,7 +138,8 @@ td {
 	color: #ffffff;
 	text-align: center;
 }
-
+*/
+/*
 footer a{
 	text-decoration: none;
 	color: #ccff33;
@@ -141,6 +150,14 @@ footer  a:hover, #nav a:active
 	color: #000000;
 	background-color: #ccff33;
 	padding: 2px;
+} */
+
+.page-footer {
+  background-color: #B3BEBE !important;
+  margin: 3rem !important;
+  border: 3rem !important;
+  padding: 3rem !important;
+
 }
 
 /* ------------------------- */
@@ -152,7 +169,7 @@ footer  a:hover, #nav a:active
 /* Social Media Icons */
 
 .fa {
-  padding: 20px;
+  padding: 5px;
   font-size: 30px;
   width: 50px;
   text-align: center;
@@ -268,4 +285,14 @@ footer  a:hover, #nav a:active
 .fa-rss {
   background: #ff6600;
   color: white;
+}
+
+.fa-github {
+  background: black;
+  color: white;
+}
+
+.fa-envelope {
+  background-color: red;
+  color: black;
 }
