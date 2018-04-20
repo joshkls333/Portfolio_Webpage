@@ -1,0 +1,268 @@
+/**********
+Created by: Josh Klaus
+**********/
+
+
+body {
+    font-family: monaco, arial;
+    background-image: url('images/dkgrnback.jpeg') !important;
+    background-repeat: no-repeat !important;
+  background: #0F5B30 !important;
+ 	/* background: -webkit-linear-gradient(orange,green);
+ 	background: -o-linear-gradient(orange,green);
+ 	background: -moz-linear-gradient(orange,green);
+ 	background: linear-gradient(orange,green); */
+	color: #000000;
+    text-align: center;
+}
+
+.jumbotron {
+  background-image: url('../images/dkgrnback.jpeg');
+  color: #D4D36A;
+}
+
+.img-responsive {
+  width: 100%;
+  max-width: 350px;
+
+}
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1;
+  border-top: 3px solid rgba(0, 256, 0, 0.1);
+}
+
+.container{
+	width: 900px;
+	margin: 0px auto;
+	text-align: left; /* IE hack */
+}
+
+a{
+ text-decoration: none;
+ color: #006600;
+/* color: #703b00; */
+}
+
+a:hover, #nav a:active{
+	color: #FFFFFF;
+	background-color: #006600;
+	padding: 2px;
+}
+
+#nav{
+	margin: 0px auto;
+	padding: 10px;
+}
+
+#nav li{
+	display: inline;
+	margin: 0px auto;
+	background-color: #aede94;
+/*	background-color: #8bfea8; */
+	padding: 10px;
+	font-size: 14pt;
+}
+
+#nav a{
+	text-decoration: none;
+	color: #703b00;
+}
+
+#nav  a:hover, #nav a:active
+{
+	color: #FFFFFF;
+	background-color: #006600;
+	padding: 2px;
+}
+
+#nav .selected{
+	font-weight: bold;
+}
+
+
+table.main{
+	width: 900px;
+/*	background-color: #a2dd89; */
+	background-color: #f1faa6;
+	padding: 10px;
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+tr{
+	text-align: left;
+}
+
+tr.tabletitle{
+	font-size: 32px;
+	font-family: tahoma;
+}
+
+tr.headers{
+	font-size: 18px;
+	font-family: tahoma;
+}
+
+th{
+/*	font-size: 18px;  */
+	text-align: center;
+	background-color: #cc9966;
+}
+
+td {
+	border: 1px solid black;
+	text-align: left;
+	padding: 10px;
+}
+
+.footer{
+	font-family: arial;
+	font-size: 18px;
+    float: left;
+	clear: both;
+	width: 100%;
+	padding: 10px;
+	color: #ffffff;
+	text-align: center;
+}
+
+footer a{
+	text-decoration: none;
+	color: #ccff33;
+}
+
+footer  a:hover, #nav a:active
+{
+	color: #000000;
+	background-color: #ccff33;
+	padding: 2px;
+}
+
+/* ------------------------- */
+/* ------------------------- */
+/* ------------------------- */
+/* ------------------------- */
+/* ------------------------- */
+
+/* Social Media Icons */
+
+.fa {
+  padding: 20px;
+  font-size: 30px;
+  width: 50px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+}
+
+.fa:hover {
+    opacity: 0.7;
+}
+
+.fa-facebook {
+  background: #3B5998;
+  color: white;
+}
+
+.fa-twitter {
+  background: #55ACEE;
+  color: white;
+}
+
+.fa-google {
+  background: #dd4b39;
+  color: white;
+}
+
+.fa-linkedin {
+  background: #007bb5;
+  color: white;
+}
+
+.fa-youtube {
+  background: #bb0000;
+  color: white;
+}
+
+.fa-instagram {
+  background: #125688;
+  color: white;
+}
+
+.fa-pinterest {
+  background: #cb2027;
+  color: white;
+}
+
+.fa-snapchat-ghost {
+  background: #fffc00;
+  color: white;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.fa-skype {
+  background: #00aff0;
+  color: white;
+}
+
+.fa-android {
+  background: #a4c639;
+  color: white;
+}
+
+.fa-dribbble {
+  background: #ea4c89;
+  color: white;
+}
+
+.fa-vimeo {
+  background: #45bbff;
+  color: white;
+}
+
+.fa-tumblr {
+  background: #2c4762;
+  color: white;
+}
+
+.fa-vine {
+  background: #00b489;
+  color: white;
+}
+
+.fa-foursquare {
+  background: #45bbff;
+  color: white;
+}
+
+.fa-stumbleupon {
+  background: #eb4924;
+  color: white;
+}
+
+.fa-flickr {
+  background: #f40083;
+  color: white;
+}
+
+.fa-yahoo {
+  background: #430297;
+  color: white;
+}
+
+.fa-soundcloud {
+  background: #ff5500;
+  color: white;
+}
+
+.fa-reddit {
+  background: #ff5700;
+  color: white;
+}
+
+.fa-rss {
+  background: #ff6600;
+  color: white;
+}
