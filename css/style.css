@@ -50,6 +50,15 @@ hr {
   padding: 3rem !important;
 }
 
+h2 {
+  background-color: #D6AA93 !important;
+  border-width: 2px;
+  border-style: solid;
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
 /* a{
  text-decoration: none;
  color: #006600;
@@ -92,6 +101,8 @@ hr {
 	font-weight: bold;
 }
 
+
+/* table styles */
 
 table.main{
 	width: 900px;
