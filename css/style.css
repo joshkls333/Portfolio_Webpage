@@ -16,14 +16,6 @@ body {
   text-shadow: 2px 2px #000;
 }
 
-/* .navbar {
-  background-color: #B3BEBE;
-}
-
-.icon-bar {
-  background-color: #B3BEBE;
-} */
-
 .img-responsive {
   width: 100%;
   max-width: 350px;
@@ -92,17 +84,17 @@ h3 {
 }
 
 .navbar .nav-item {
-  background-color: #78826B;
-  margin: 0px;
-  padding: 0px;
+  background-color: #78826B !important;
+  margin: 0px !important;
+  padding: 0px !important;
 }
 
 .navbar .nav-item  a:hover, .navbar .nav-item a:active
 {
-  text-decoration: none;
-	padding: 10px 10px;
-  color: #000;
-  background-color: #006600;
+  text-decoration: none !important;
+	padding: 10px 10px !important;
+  color: #000 !important;
+  background-color: #006600 !important;
 }
 
 .nav-item a{
