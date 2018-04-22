@@ -13,6 +13,7 @@ body {
 .jumbotron {
   background-image: url('../images/dkgrnback.jpeg');
   color: #D4D36A;
+  text-shadow: 2px 2px #000;
 }
 
 .img-responsive {
@@ -97,68 +98,6 @@ h3 {
 .nav-item .selected{
 	font-weight: bold;
 }
-
-
-/* table styles */
-
-table.main{
-	width: 900px;
-/*	background-color: #a2dd89; */
-	background-color: #f1faa6;
-	padding: 10px;
-	border: 1px solid black;
-	border-collapse: collapse;
-}
-
-tr{
-	text-align: left;
-}
-
-tr.tabletitle{
-	font-size: 32px;
-	font-family: tahoma;
-}
-
-tr.headers{
-	font-size: 18px;
-	font-family: tahoma;
-}
-
-th{
-/*	font-size: 18px;  */
-	text-align: center;
-	background-color: #cc9966;
-}
-
-td {
-	border: 1px solid black;
-	text-align: left;
-	padding: 10px;
-}
-
-/* .footer{
-	font-family: arial;
-	font-size: 18px;
-    float: left;
-	clear: both;
-	width: 100%;
-	padding: 10px;
-	color: #ffffff;
-	text-align: center;
-}
-*/
-/*
-footer a{
-	text-decoration: none;
-	color: #ccff33;
-}
-
-footer  a:hover, #nav a:active
-{
-	color: #000000;
-	background-color: #ccff33;
-	padding: 2px;
-} */
 
 .page-footer {
   background-color: #B3BEBE !important;
